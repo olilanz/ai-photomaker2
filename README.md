@@ -7,10 +7,9 @@ docker build -t olilanz/ai-photomaker2 .
 
 ```bash
 docker run -it --rm --name ai-photomaker2 \
-  --shm-size 24g --gpus all \
-  -p 7860:7860 \
+  --shm-size 24g --gpus '"device=1"' \
+  -p 7861:7860 \
   -v /mnt/cache/appdata/ai-photomaker2:/workspace \
-  -e YUEGP_AUTO_UPDATE=1 \
-  --network host \
+  -e PM2_AUTO_UPDATE=1 \
   olilanz/ai-photomaker2
 ```

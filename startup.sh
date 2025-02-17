@@ -59,10 +59,17 @@ pip install --no-cache-dir \
 # PhotoMaker is loaded as a Python Module - directly out of the git repo
 export PYTHONPATH="$PM2_HOME"
 
-# Start the service
-PM2_ARGS="--server-name 0.0.0.0 --server-port 7860"
+# patching the start-up function, so that the script listens on the public network interface
+if grep -q 'demo.launch(server_name="0.0.0.0", server_port=7860)' "$PM2_HOME/app.py"; then
+    echo "Launch function is already patched."
+else
+    # Replace demo.launch() with demo.launch(server_name="0.0.0.0", server_port=7860)
+    sed -i 's/demo.launch()/demo.launch(server_name="0.0.0.0", server_port=7860)/g' "$PM2_HOME/app.py"
+    echo "Launch function patched with server_name=\"0.0.0.0\", server_port=7860."
+fi
 
+# Start the service
 echo "🚀 Starting HVGP service..."
 cd  "$PM2_HOME"
-python3 -u app.py ${PM2_ARGS} 2>&1 | tee "${CACHE_HOME}/output.log"
+python3 -u app.py 2>&1 | tee "${CACHE_HOME}/output.log"
 echo "❌ The HVGP service has terminated."
