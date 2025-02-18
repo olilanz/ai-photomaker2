@@ -69,7 +69,7 @@ else
 fi
 
 # Start the service
-echo "🚀 Starting HVGP service..."
+echo "🚀 Starting PM2 service..."
 cd  "$PM2_HOME"
 python3 -u app.py 2>&1 | tee "${CACHE_HOME}/output.log"
 echo "❌ The HVGP service has terminated."
